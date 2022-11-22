@@ -2,11 +2,18 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useContext } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 import { auth } from "../lib/initFirebase";
 import GoogleLogo from "../components/GoogleLog";
 import { AuthContext } from "../context/AuthContext";
+
+interface SuccessResponse {
+  mesg: string;
+}
+
+interface ErrorResponse {
+  error: string;
+}
 
 const LoginPage = () => {
   const { user } = useContext(AuthContext);
@@ -25,21 +32,26 @@ const LoginPage = () => {
   const handleGoogleLogin = () => {
     const verifyIdToken = async () => {
       await loginWithGoogle();
-      const idToken = await auth.currentUser?.getIdToken(true);
-      console.log("Calling API with user token:", idToken);
+      const token = await auth.currentUser?.getIdToken(true);
+      console.log("Calling API with user token:", token);
 
-      const endpoint = "http://localhost:3001/api/v1/users/new";
+      const endpoint = "http://localhost:3001/api/v1/users/create";
       const requestInfo = {
         headers: {
-          authorization: `Bearer ${idToken}`,
+          authorization: `Bearer ${token}`,
         },
       };
 
       try {
-        const response = await axios.get(endpoint, requestInfo);
+        const response = await axios.get<SuccessResponse>(
+          endpoint,
+          requestInfo
+        );
         console.log(response.data);
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        if (axios.isAxiosError(err) && err.response) {
+          console.log((err.response?.data as ErrorResponse).error);
+        }
       }
     };
     verifyIdToken();

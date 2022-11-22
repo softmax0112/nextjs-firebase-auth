@@ -34,6 +34,8 @@ export const AuthContextProvider = (props: AuthContextProps) => {
     );
   }
 
+  console.log(user);
+
   const logout = () => {
     signOut(auth);
     console.log("logged out!");
