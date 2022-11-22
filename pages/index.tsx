@@ -1,12 +1,26 @@
 import Head from "next/head";
-import type { NextPage } from "next";
-import Image from "next/image";
+import Link from "next/link";
 
-import SignIn from "../components/Signin";
+import PostList from "../components/PostList";
 
-const Home: NextPage = () => {
+const HomePage = () => {
+  const DUMMY_DATA = [
+    {
+      id: 1,
+      date: "12 Jun 2019",
+      title: "Bitters hashtag waistcoat fashion axe",
+      body: "Glossier echo park pug, church-key sartorial biodiesel vexillologist pop-up snackwave ramps cornhole.",
+    },
+    {
+      id: 2,
+      date: "12 Jun 2019",
+      title: "Meditation bushwick direct trade",
+      body: "Glossier echo park pug, church-key sartorial biodiesel vexillologist pop-up snackwave ramps cornhole.",
+    },
+  ];
+
   return (
-    <div className="py-0 px-8 my-30">
+    <>
       <Head>
         <title>Firebase Auth Sample App</title>
         <meta
@@ -14,15 +28,10 @@ const Home: NextPage = () => {
           content="This is a sample app using firebase authenticate"
         />
       </Head>
-
-      <div className="max-w-lg mx-auto">
-        <h1 className="text-4xl font-medium my-20 text-center">
-          Firebase Auth Sample App
-        </h1>
-      </div>
-      <SignIn />
-    </div>
+      <PostList postData={DUMMY_DATA} />
+      <Link href="/dashboard">Dashbord</Link>
+    </>
   );
 };
 
-export default Home;
+export default HomePage;

@@ -13,7 +13,7 @@ const PostDetail = (props: Prop): JSX.Element => {
         </span>
       </div>
       <div className="md:flex-grow">
-        <h2 className="text-2xl font-medium text-gray-900 title-font mb-2">
+        <h2 className="text-2xl font-medium text-gray-800 title-font mb-2">
           {props.postDetail.title}
         </h2>
         <p className="leading-relaxed">{props.postDetail.body}</p>
