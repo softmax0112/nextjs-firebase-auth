@@ -1,26 +1,24 @@
-import { useContext, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
+import { useAuthState } from "react-firebase-hooks/auth";
 
-import { AuthContext } from "../../context/AuthContext";
-
+import { auth } from "../../lib/initFirebase";
 interface Inputs {
   title: string;
   body: string;
 }
 
-interface SuccessResponse {
-  data: {};
-}
-
-interface ErrorResponse {
-  error: string;
-}
-
 const NewPostPage = () => {
-  const { user } = useContext(AuthContext);
+  const [user, loading] = useAuthState(auth);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!(user || loading)) {
+      router.push("/login");
+    }
+  }, [user, loading]);
 
   const {
     register,
@@ -31,34 +29,28 @@ const NewPostPage = () => {
   const sendPost: SubmitHandler<Inputs> = async (postData) => {
     const token = await user?.getIdToken();
     console.log("Calling API with user token:", token);
-    console.log(postData);
 
-    const endpoint = "http://localhost:3001/api/v1/posts";
-    const requestInfo = {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
+    const config = {
+      headers: { authorization: `Bearer ${token}` },
     };
+
     try {
-      const response = await axios.post<SuccessResponse>(
-        endpoint,
-        { post: postData },
-        requestInfo
-      );
+      const response = await axios.post("/posts", { post: postData }, config);
       console.log(response.data);
-      router.push("/");
+      if (response.status === 200) {
+        alert("Post is created successfully");
+        router.push("/");
+      }
     } catch (err) {
+      let message;
       if (axios.isAxiosError(err) && err.response) {
-        console.log((err.response?.data as ErrorResponse).error);
+        console.error(err.response.data.message);
       } else {
-        console.log(err);
+        message = String(err);
+        console.error(message);
       }
     }
   };
-
-  if (!user) {
-    router.push("/login");
-  }
 
   return (
     <div className="container px-5 py-24 mx-auto">

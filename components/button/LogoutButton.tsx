@@ -1,11 +1,17 @@
-type LogoutProps = {
-  onLogout: () => void;
-};
+import { useSignOut } from "react-firebase-hooks/auth";
+import { auth } from "../../lib/initFirebase";
 
-const LogoutButton = (props: LogoutProps) => {
+const LogoutButton = () => {
+  const [signOut, loading, error] = useSignOut(auth);
+
   return (
     <button
-      onClick={props.onLogout}
+      onClick={async () => {
+        const success = await signOut();
+        if (success) {
+          alert("You are signed out");
+        }
+      }}
       className="inline-flex items-center justify-center rounded-lg border border-gray-200 px-5 py-3 text-gray-500 transition hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:ring"
       type="button"
     >

@@ -1,56 +1,54 @@
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useContext } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useSignInWithGoogle } from "react-firebase-hooks/auth";
 
 import { auth } from "../lib/initFirebase";
 import GoogleLogo from "../components/GoogleLog";
-import { AuthContext } from "../context/AuthContext";
-
-interface SuccessResponse {
-  mesg: string;
-}
-
-interface ErrorResponse {
-  error: string;
-}
 
 const LoginPage = () => {
-  const { user } = useContext(AuthContext);
   const router = useRouter();
+  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+
+  if (loading) {
+    return <div className="py-20 text-center">Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div>
+        <p>Error happened: {error.message}</p>
+      </div>
+    );
+  }
 
   if (user) {
     router.push("/");
   }
 
-  const loginWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    console.log(result.user);
-  };
-
   const handleGoogleLogin = () => {
     const verifyIdToken = async () => {
-      await loginWithGoogle();
-      const token = await auth.currentUser?.getIdToken(true);
+      await signInWithGoogle();
+      const token = await user?.user.getIdToken(true);
       console.log("Calling API with user token:", token);
 
-      const endpoint = "http://localhost:3001/api/v1/users/create";
-      const requestInfo = {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+      const config = {
+        headers: { authorization: `Bearer ${token}` },
       };
 
       try {
-        const response = await axios.get<SuccessResponse>(
-          endpoint,
-          requestInfo
-        );
+        const response = await axios.get("/login", config);
         console.log(response.data);
+        if (response.status === 200) {
+          router.push("/");
+          alert("Welcme back");
+        }
       } catch (err) {
+        let message;
         if (axios.isAxiosError(err) && err.response) {
-          console.log((err.response?.data as ErrorResponse).error);
+          console.error(err.response.data.message);
+        } else {
+          message = String(err);
+          console.error(message);
         }
       }
     };
