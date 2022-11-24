@@ -13,17 +13,14 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
+// If app already exists, get that one
 const getFirebaseApp = () => {
   if (getApps().length === 0) {
-    const app = initializeApp(firebaseConfig);
-    return app;
+    return initializeApp(firebaseConfig);
   } else {
-    const app = getApp();
-    return app;
+    return getApp();
   }
 };
 
 const app = getFirebaseApp();
-
-// Export function to initialize firebase.
 export const auth = getAuth(app);

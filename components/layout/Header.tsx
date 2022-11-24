@@ -1,14 +1,19 @@
 import Link from "next/link";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useContext, useEffect } from "react";
+import Router from "next/router";
 
-import { auth } from "../../lib/initFirebase";
+import { AuthContext } from "../../context/AuthContext";
 import LoginButton from "../button/LoginButton";
 import LogoutButton from "../button/LogoutButton";
 
 const Header = () => {
-  const [user] = useAuthState(auth);
+  const { currentUser } = useContext(AuthContext);
 
-  const userPhotoUrl = user?.photoURL;
+  const userPhotoUrl = currentUser?.photoURL;
+
+  useEffect(() => {
+    currentUser && Router.push("/");
+  }, [currentUser]);
 
   return (
     <header className="container flex items-center justify-between mx-auto px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
@@ -20,7 +25,7 @@ const Header = () => {
       </Link>
       <nav className="flex items-center justify-between">
         <div className="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
-          {user && (
+          {currentUser && (
             <img
               src={userPhotoUrl || undefined}
               alt="User photo"
@@ -29,8 +34,8 @@ const Header = () => {
               className="h-10 w-10 rounded-full object-cover"
             />
           )}
-          {user ? <LogoutButton /> : <LoginButton />}
-          {user && (
+          {currentUser ? <LogoutButton /> : <LoginButton />}
+          {currentUser && (
             <Link
               href="/posts/new"
               className="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
