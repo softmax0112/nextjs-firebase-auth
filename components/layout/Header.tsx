@@ -24,6 +24,7 @@ const Header = () => {
             <img
               src={userPhotoUrl || undefined}
               alt="User photo"
+              referrerPolicy="no-referrer"
               width={24}
               className="h-10 w-10 rounded-full object-cover"
             />
