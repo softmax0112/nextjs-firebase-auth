@@ -3,20 +3,14 @@ import Link from "next/link";
 import axios from "axios";
 
 import PostList from "../components/posts/PostList";
+import { Post } from "types/types";
 import ProtectedPage from "./protected";
-export interface Post {
-  id: number;
-  user_uid: string;
-  title: string;
-  body: string;
-  created_at: string;
-}
 
-type HomeProps = {
+type Props = {
   posts: Post[];
 };
 
-export default function HomePage({ posts }: HomeProps) {
+export default function HomePage({ posts }: Props) {
   return (
     <>
       <Head>

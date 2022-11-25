@@ -1,10 +1,10 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import Head from "next/head";
 
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "context/AuthContext";
 
 interface Inputs {
   title: string;

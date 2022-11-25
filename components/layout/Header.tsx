@@ -1,14 +1,13 @@
 import Link from "next/link";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import Router from "next/router";
-import { signOut } from "firebase/auth";
 
 import LoginButton from "../atoms/button/LoginButton";
 import LogoutButton from "../atoms/button/LogoutButton";
-import useFirebaseAuth from "../../hooks/useFirebaseAuth";
+import { useAuth } from "context/AuthContext";
 
 const Header = () => {
-  const { currentUser, loading, signOut } = useFirebaseAuth();
+  const { currentUser, loading, signOut } = useAuth();
 
   const userPhotoUrl = currentUser?.photoURL;
 
