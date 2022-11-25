@@ -3,11 +3,11 @@ import { useContext, useEffect } from "react";
 import Router from "next/router";
 
 import { AuthContext } from "../../context/AuthContext";
-import LoginButton from "../button/LoginButton";
-import LogoutButton from "../button/LogoutButton";
+import LoginButton from "../atoms/LoginButton";
+import LogoutButton from "../atoms/button/LogoutButton";
 
 const Header = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, isLoading } = useContext(AuthContext);
 
   const userPhotoUrl = currentUser?.photoURL;
 

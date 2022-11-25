@@ -1,9 +1,6 @@
-import { useSignOut } from "react-firebase-hooks/auth";
-import { auth } from "../../lib/initFirebase";
+import { auth } from "../../../lib/initFirebase";
 
 const LogoutButton = () => {
-  const [signOut, loading, error] = useSignOut(auth);
-
   return (
     <button
       onClick={async () => {

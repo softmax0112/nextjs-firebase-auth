@@ -1,24 +1,25 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
-import { useAuthState } from "react-firebase-hooks/auth";
+import Head from "next/head";
 
-import { auth } from "../../lib/initFirebase";
+import { AuthContext } from "../../context/AuthContext";
+
 interface Inputs {
   title: string;
   body: string;
 }
 
-const NewPostPage = () => {
-  const [user, loading] = useAuthState(auth);
+export default function NewPostPage() {
+  const { currentUser } = useContext(AuthContext);
   const router = useRouter();
 
   useEffect(() => {
-    if (!(user || loading)) {
+    if (!currentUser) {
       router.push("/login");
     }
-  }, [user, loading]);
+  }, []);
 
   const {
     register,
@@ -27,7 +28,7 @@ const NewPostPage = () => {
   } = useForm<Inputs>();
 
   const sendPost: SubmitHandler<Inputs> = async (postData) => {
-    const token = await user?.getIdToken();
+    const token = await currentUser?.getIdToken();
     console.log("Calling API with user token:", token);
 
     const config = {
@@ -53,57 +54,70 @@ const NewPostPage = () => {
   };
 
   return (
-    <div className="container px-5 py-24 mx-auto">
-      <div className="lg:w-1/2 md:w-2/3 mx-auto">
-        <form onSubmit={handleSubmit(sendPost)} className="flex flex-wrap -m-2">
-          <div className="p-2 w-full">
-            <div className="relative">
-              <label
-                htmlFor="title"
-                className="leading-7 text-sm text-gray-600"
+    <>
+      <Head>
+        <title>Firebase Auth Sample App</title>
+        <meta
+          name="description"
+          content="This is a sample app using firebase authenticate"
+        />
+      </Head>
+      <div className="container px-5 py-24 mx-auto">
+        <div className="lg:w-1/2 md:w-2/3 mx-auto">
+          <form
+            onSubmit={handleSubmit(sendPost)}
+            className="flex flex-wrap -m-2"
+          >
+            <div className="p-2 w-full">
+              <div className="relative">
+                <label
+                  htmlFor="title"
+                  className="leading-7 text-sm text-gray-600"
+                >
+                  Title
+                </label>
+                <input
+                  {...register("title", { required: true, maxLength: 60 })}
+                  aria-invalid={errors.title ? "true" : "false"}
+                  type="text"
+                  id="title"
+                  name="title"
+                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                />
+                {errors.title &&
+                  "Title is required and should be less than 60 words."}
+              </div>
+            </div>
+
+            <div className="p-2 w-full">
+              <div className="relative">
+                <label
+                  htmlFor="body"
+                  className="leading-7 text-sm text-gray-600"
+                >
+                  Body
+                </label>
+                <textarea
+                  {...register("body", { required: true, maxLength: 500 })}
+                  id="body"
+                  name="body"
+                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+                ></textarea>
+                {errors.body &&
+                  "Body is required and should be less than 500 words."}
+              </div>
+            </div>
+            <div className="p-2 w-full">
+              <button
+                type="submit"
+                className="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
               >
-                Title
-              </label>
-              <input
-                {...register("title", { required: true, maxLength: 20 })}
-                aria-invalid={errors.title ? "true" : "false"}
-                type="text"
-                id="title"
-                name="title"
-                className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-              />
-              {errors.title &&
-                "Title is required and should be less than 20 words."}
+                Create Post
+              </button>
             </div>
-          </div>
-
-          <div className="p-2 w-full">
-            <div className="relative">
-              <label htmlFor="body" className="leading-7 text-sm text-gray-600">
-                Body
-              </label>
-              <textarea
-                {...register("body", { required: true, maxLength: 255 })}
-                id="body"
-                name="body"
-                className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
-              ></textarea>
-              {errors.body &&
-                "Body is required and should be less than 255 words."}
-            </div>
-          </div>
-          <div className="p-2 w-full">
-            <button
-              type="submit"
-              className="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
-            >
-              Create Post
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
-};
-
-export default NewPostPage;
+}
