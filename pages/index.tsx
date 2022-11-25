@@ -1,24 +1,22 @@
 import Head from "next/head";
 import Link from "next/link";
+import axios from "axios";
 
-import PostList from "../components/PostList";
+import PostList from "../components/posts/PostList";
+import ProtectedPage from "./protected";
+export interface Post {
+  id: number;
+  user_uid: string;
+  title: string;
+  body: string;
+  created_at: string;
+}
 
-const HomePage = () => {
-  const DUMMY_DATA = [
-    {
-      id: 1,
-      date: "12 Jun 2019",
-      title: "Bitters hashtag waistcoat fashion axe",
-      body: "Glossier echo park pug, church-key sartorial biodiesel vexillologist pop-up snackwave ramps cornhole.",
-    },
-    {
-      id: 2,
-      date: "12 Jun 2019",
-      title: "Meditation bushwick direct trade",
-      body: "Glossier echo park pug, church-key sartorial biodiesel vexillologist pop-up snackwave ramps cornhole.",
-    },
-  ];
+type HomeProps = {
+  posts: Post[];
+};
 
+export default function HomePage({ posts }: HomeProps) {
   return (
     <>
       <Head>
@@ -28,10 +26,30 @@ const HomePage = () => {
           content="This is a sample app using firebase authenticate"
         />
       </Head>
-      <PostList postData={DUMMY_DATA} />
-      <Link href="/dashboard">Dashbord</Link>
+      {/* protected link below is just for test */}
+      {/* <Link href="/protected">Protected</Link> */}
+      <PostList posts={posts} />
     </>
   );
-};
+}
 
-export default HomePage;
+// code execute when npm run build, not on server-side or client-side
+export async function getStaticProps() {
+  try {
+    const response = await axios.get("/posts");
+    const posts: Post[] = response.data;
+    return {
+      props: {
+        posts,
+      },
+    };
+  } catch (err) {
+    let message;
+    if (axios.isAxiosError(err) && err.response) {
+      console.error(err.response.data.message);
+    } else {
+      message = String(err);
+      console.error(message);
+    }
+  }
+}
