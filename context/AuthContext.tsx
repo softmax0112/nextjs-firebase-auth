@@ -1,34 +1,29 @@
-import { createContext, useEffect, useState } from "react";
-import { User } from "firebase/auth";
-
-import { auth } from "../lib/initFirebase";
+import { createContext, useContext } from "react";
+import useFirebaseAuth, { loginWithGoogle } from "../hooks/useFirebaseAuth";
+import { User, UserCredential } from "firebase/auth";
 
 type AuthContextProps = {
-  currentUser: User | null | undefined;
+  currentUser: User | null;
+  loading: boolean;
+  loginWithGoogle: () => Promise<UserCredential>;
+  signOut: () => Promise<void>;
 };
 
-export const AuthContext = createContext<AuthContextProps>({
+type AuthProviderProps = {
+  children: React.ReactNode;
+};
+
+const AuthContext = createContext<AuthContextProps>({
   currentUser: null,
+  loading: true,
+  loginWithGoogle: loginWithGoogle,
+  signOut: async () => {},
 });
 
-export const AuthContextProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const [currentUser, setCurrentUser] = useState<User | null | undefined>(
-    undefined
-  );
+export function AuthContextProvider({ children }: AuthProviderProps) {
+  const auth = useFirebaseAuth();
 
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-    });
-  }, []);
-
-  return (
-    <AuthContext.Provider value={{ currentUser }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+}
+// custom hook to use the userContext and access currentUser and loading
+export const useAuth = () => useContext(AuthContext);

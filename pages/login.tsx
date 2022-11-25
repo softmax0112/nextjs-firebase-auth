@@ -1,17 +1,19 @@
 import axios from "axios";
 import { useRouter } from "next/router";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
-import { auth } from "../lib/initFirebase";
-import GoogleLogo from "../components/GoogleLog";
+import GoogleLogo from "../components/atoms/GoogleLog";
+import useFirebaseAuth from "../hooks/useFirebaseAuth";
 
-const LoginPage = () => {
+export default function LoginPage() {
   const router = useRouter();
+  const { loginWithGoogle } = useFirebaseAuth();
 
   const handleGoogleLogin = () => {
     const verifyIdToken = async () => {
-      const provider = new GoogleAuthProvider();
-      const user = await signInWithPopup(auth, provider);
+      const user = await loginWithGoogle();
+      if (user) {
+        router.push("/");
+      }
 
       const token = await user.user.getIdToken();
       console.log("Calling API with user token:", token);
@@ -23,9 +25,6 @@ const LoginPage = () => {
       try {
         const response = await axios.post("/auth", config);
         console.log(response.data);
-        if (response.status === 200) {
-          router.push("/");
-        }
       } catch (err) {
         let message;
         if (axios.isAxiosError(err) && err.response) {
@@ -55,6 +54,4 @@ const LoginPage = () => {
       </div>
     </div>
   );
-};
-
-export default LoginPage;
+}

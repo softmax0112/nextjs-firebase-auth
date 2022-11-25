@@ -1,19 +1,27 @@
 import Link from "next/link";
 import { useContext, useEffect } from "react";
 import Router from "next/router";
+import { signOut } from "firebase/auth";
 
-import { AuthContext } from "../../context/AuthContext";
-import LoginButton from "../atoms/LoginButton";
+import LoginButton from "../atoms/button/LoginButton";
 import LogoutButton from "../atoms/button/LogoutButton";
+import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 
 const Header = () => {
-  const { currentUser, isLoading } = useContext(AuthContext);
+  const { currentUser, loading, signOut } = useFirebaseAuth();
 
   const userPhotoUrl = currentUser?.photoURL;
 
   useEffect(() => {
-    currentUser && Router.push("/");
-  }, [currentUser]);
+    if (!loading && !currentUser) {
+      Router.push("/");
+    }
+  }, [currentUser, loading]);
+
+  const logoutHandler = async () => {
+    await signOut();
+    alert("You are signed out");
+  };
 
   return (
     <header className="container flex items-center justify-between mx-auto px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
@@ -34,8 +42,12 @@ const Header = () => {
               className="h-10 w-10 rounded-full object-cover"
             />
           )}
-          {currentUser ? <LogoutButton /> : <LoginButton />}
-          {currentUser && (
+          {currentUser ? (
+            <LogoutButton onLogout={logoutHandler} />
+          ) : (
+            <LoginButton />
+          )}
+          {!loading && currentUser && (
             <Link
               href="/posts/new"
               className="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
