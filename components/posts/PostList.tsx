@@ -2,7 +2,7 @@ import PostListItem from "./PostListItem";
 import { Post } from "types/types";
 
 type PostListProps = {
-  posts: Post[];
+  posts?: Post[];
 };
 
 const PostList = ({ posts }: PostListProps) => {
@@ -12,7 +12,7 @@ const PostList = ({ posts }: PostListProps) => {
         <h3 className="text-3xl font-medium text-center">All Posts</h3>
         <div className="container py-6 mx-auto text-gray-600 body-font overflow-hidden">
           <div className="divide-y-2 divide-gray-100">
-            {posts.map((post) => (
+            {posts?.map((post) => (
               <PostListItem key={post.id} post={post} />
             ))}
           </div>
