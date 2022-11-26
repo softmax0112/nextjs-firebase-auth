@@ -7,12 +7,12 @@ import PostList from "../components/posts/PostList";
 import { Post } from "types/types";
 import ProtectedPage from "./protected";
 
-type Props = {
-  posts: Post[];
-};
+// type Props = {
+//   posts: Post[];
+// };
 
 export default function HomePage() {
-  const [posts, setPosts] = useState<Post[] | undefined>(undefined);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
     const getPostData = async () => {
@@ -34,7 +34,7 @@ export default function HomePage() {
       </Head>
       {/* protected link below is just for test */}
       {/* <Link href="/protected">Protected</Link> */}
-      <PostList posts={posts} />
+      {posts && <PostList posts={posts} />}
     </>
   );
 }

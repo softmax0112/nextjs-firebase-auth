@@ -19,25 +19,28 @@ const PostDetail = (props: Props) => {
   const date = new Date(post.created_at);
 
   const deletePost = async () => {
-    const token = await currentUser?.getIdToken();
-    console.log("Calling API with user token:", token);
+    const result = confirm("Want to delete?");
+    if (result) {
+      const token = await currentUser?.getIdToken();
+      console.log("Calling API with user token:", token);
 
-    const config = {
-      headers: { authorization: `Bearer ${token}` },
-    };
+      const config = {
+        headers: { authorization: `Bearer ${token}` },
+      };
 
-    try {
-      const response = await axios.delete(`/posts/${post.id}`, config);
-      if (response.status === 200) {
-        router.push("/");
-      }
-    } catch (err) {
-      let message;
-      if (axios.isAxiosError(err) && err.response) {
-        console.error(err.response.data.message);
-      } else {
-        message = String(err);
-        console.error(message);
+      try {
+        const response = await axios.delete(`/posts/${post.id}`, config);
+        if (response.status === 200) {
+          router.push("/");
+        }
+      } catch (err) {
+        let message;
+        if (axios.isAxiosError(err) && err.response) {
+          console.error(err.response.data.message);
+        } else {
+          message = String(err);
+          console.error(message);
+        }
       }
     }
   };
