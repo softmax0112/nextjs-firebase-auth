@@ -23,7 +23,7 @@ export default function LoginPage() {
       };
 
       try {
-        const response = await axios.post("/auth", config);
+        const response = await axios.post("/auth", null, config);
         console.log(response.data);
       } catch (err) {
         let message;

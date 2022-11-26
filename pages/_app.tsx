@@ -6,7 +6,7 @@ import Layout from "../components/layout/Layout";
 import { AuthContextProvider } from "../context/AuthContext";
 
 axios.defaults.baseURL =
-  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3001/api/v1";
+  "http://localhost:3001/api/v1" || process.env.NEXT_PUBLIC_BASE_URL;
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
