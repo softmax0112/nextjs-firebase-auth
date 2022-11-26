@@ -1,7 +1,6 @@
 import { createContext, useContext } from "react";
 import useFirebaseAuth, { loginWithGoogle } from "hooks/useFirebaseAuth";
 import { User, UserCredential } from "firebase/auth";
-import { CurrentUser } from "types/types";
 
 type AuthContextProps = {
   currentUser: User | null;
