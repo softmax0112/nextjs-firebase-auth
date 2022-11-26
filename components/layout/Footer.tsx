@@ -4,8 +4,7 @@ const Footer = () => {
       <hr className="my-6 border-gray-200 lg:my-8" />
       <span className="block text-sm text-gray-500 sm:text-center">
         <a
-          href="https://github.com"
-          target="_blank"
+          href="https://github.com/lei900/next-firebase-auth"
           className="hover:underline"
         >
           See source code on Github

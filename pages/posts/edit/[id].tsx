@@ -14,6 +14,7 @@ type Props = {
 export default function EditPostPage() {
   const [postData, setPostData] = useState<Post | undefined>(undefined);
   const { currentUser } = useAuth();
+  const router = useRouter();
   const { id } = useRouter().query;
 
   useEffect(() => {
@@ -21,7 +22,7 @@ export default function EditPostPage() {
       const response = await axios.get(`/posts/${id}`);
       const post: Post = response.data;
       if (!currentUser || currentUser.uid !== post.user_uid) {
-        useRouter().push("/login");
+        router.push("/login");
       } else {
         setPostData(post);
       }

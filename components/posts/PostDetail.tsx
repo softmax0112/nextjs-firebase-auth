@@ -15,6 +15,7 @@ type Props = {
 const PostDetail = (props: Props) => {
   const { post, isAuthor } = props;
   const { currentUser } = useAuth();
+  const router = useRouter();
   const date = new Date(post.created_at);
 
   const deletePost = async () => {
@@ -28,7 +29,7 @@ const PostDetail = (props: Props) => {
     try {
       const response = await axios.delete(`/posts/${post.id}`, config);
       if (response.status === 200) {
-        useRouter().push("/");
+        router.push("/");
       }
     } catch (err) {
       let message;

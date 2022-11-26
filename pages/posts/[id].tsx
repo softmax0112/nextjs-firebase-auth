@@ -12,7 +12,7 @@ export type PostProps = {
   post: Post;
 };
 
-export default function postDetailPage({ post }: PostProps) {
+export default function PostDetailPage({ post }: PostProps) {
   const { currentUser } = useAuth();
   const [isAuthor, setIsAuthor] = useState(false);
 
