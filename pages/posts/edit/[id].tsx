@@ -7,10 +7,6 @@ import { useAuth } from "context/AuthContext";
 import PostForm from "components/posts/PostForm";
 import { Post } from "types/types";
 
-type Props = {
-  post: Post;
-};
-
 export default function EditPostPage() {
   const [postData, setPostData] = useState<Post | undefined>(undefined);
   const { currentUser } = useAuth();

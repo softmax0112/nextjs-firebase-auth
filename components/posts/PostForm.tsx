@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import Head from "next/head";
-import { User } from "firebase/auth";
 
 import { Post } from "types/types";
 import { useAuth } from "context/AuthContext";
