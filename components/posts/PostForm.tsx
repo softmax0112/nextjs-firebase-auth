@@ -9,7 +9,6 @@ import { useAuth } from "context/AuthContext";
 
 type Props = {
   post?: Post;
-  currentUser: User | null;
 };
 
 export default function PostForm(props: Props) {
