@@ -61,6 +61,7 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
       props: {
         post: post,
       },
+      revalidate: 1,
     };
   } catch (err) {
     let message;
