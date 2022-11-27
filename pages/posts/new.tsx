@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import Head from "next/head";
 
-import { useAuth } from "context/AuthContext";
+import { useAuthContext } from "context/AuthContext";
 
 interface Inputs {
   title: string;
@@ -12,7 +12,7 @@ interface Inputs {
 }
 
 export default function NewPostPage() {
-  const { currentUser, loading } = useAuth();
+  const { currentUser, loading } = useAuthContext();
   const router = useRouter();
 
   // Listen for changes on loading and currentUser, redirect if not logged in

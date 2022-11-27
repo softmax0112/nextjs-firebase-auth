@@ -4,10 +4,10 @@ import Router from "next/router";
 
 import LoginButton from "../atoms/button/LoginButton";
 import LogoutButton from "../atoms/button/LogoutButton";
-import { useAuth } from "context/AuthContext";
+import { useAuthContext } from "context/AuthContext";
 
 const Header = () => {
-  const { currentUser, loading, signOut } = useAuth();
+  const { currentUser, loading, logout } = useAuthContext();
 
   const userPhotoUrl = currentUser?.photoURL;
 
@@ -18,7 +18,7 @@ const Header = () => {
   }, [currentUser, loading]);
 
   const logoutHandler = async () => {
-    await signOut();
+    await logout();
     alert("You are signed out");
   };
 

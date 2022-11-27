@@ -4,14 +4,14 @@ import axios from "axios";
 import Head from "next/head";
 
 import { Post } from "types/types";
-import { useAuth } from "context/AuthContext";
+import { useAuthContext } from "context/AuthContext";
 
 type Props = {
   post?: Post;
 };
 
 export default function PostForm(props: Props) {
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuthContext();
   const router = useRouter();
 
   // if no post varaible passed in => add new post

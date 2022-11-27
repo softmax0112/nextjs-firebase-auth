@@ -13,12 +13,17 @@ import ProtectedPage from "./protected";
 
 export default function HomePage() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (loading) {
+      <p>Loading</p>;
+    }
     const getPostData = async () => {
       const response = await axios.get("/posts/");
       const posts: Post[] = response.data;
       setPosts(posts);
+      setLoading(false);
     };
     getPostData();
   }, []);
@@ -34,7 +39,7 @@ export default function HomePage() {
       </Head>
       {/* protected link below is just for test */}
       {/* <Link href="/protected">Protected</Link> */}
-      {posts && <PostList posts={posts} />}
+      <PostList posts={posts} />
     </>
   );
 }

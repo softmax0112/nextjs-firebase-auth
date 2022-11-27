@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { User } from "firebase/auth";
 
 import { Post } from "types/types";
-import { useAuth } from "context/AuthContext";
+import { useAuthContext } from "context/AuthContext";
 
 type Props = {
   post: Post;
@@ -14,7 +14,7 @@ type Props = {
 
 const PostDetail = (props: Props) => {
   const { post, isAuthor } = props;
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuthContext();
   const router = useRouter();
   const date = new Date(post.created_at);
 

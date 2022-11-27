@@ -1,4 +1,4 @@
-// Import the functions you need from the SDKs you need
+// Import the functions you need from the SDKs
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
@@ -23,4 +23,6 @@ const getFirebaseApp = () => {
 };
 
 const app = getFirebaseApp();
+
+// Returns the Auth instance associated with the provided FirebaseApp.
 export const auth = getAuth(app);

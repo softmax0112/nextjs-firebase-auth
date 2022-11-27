@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { Post } from "types/types";
-import { useAuth } from "context/AuthContext";
+import { useAuthContext } from "context/AuthContext";
 import PostDetail from "components/posts/PostDetail";
 
 // export type PostProps = {
@@ -14,7 +14,7 @@ import PostDetail from "components/posts/PostDetail";
 // };
 
 export default function PostDetailPage() {
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuthContext();
   const [isAuthor, setIsAuthor] = useState(false);
   const [post, setPost] = useState<Post | undefined>();
   const router = useRouter();

@@ -3,13 +3,13 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import axios from "axios";
 
-import { useAuth } from "context/AuthContext";
+import { useAuthContext } from "context/AuthContext";
 import PostForm from "components/posts/PostForm";
 import { Post } from "types/types";
 
 export default function EditPostPage() {
   const [postData, setPostData] = useState<Post | undefined>(undefined);
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuthContext();
   const router = useRouter();
   const { id } = useRouter().query;
 

@@ -1,21 +1,15 @@
 import axios from "axios";
-import { useRouter } from "next/router";
 
-import GoogleLogo from "../components/atoms/GoogleLog";
-import useFirebaseAuth from "../hooks/useFirebaseAuth";
+import GoogleLogo from "components/atoms/GoogleLog";
+import { useAuthContext } from "context/AuthContext";
 
 export default function LoginPage() {
-  const router = useRouter();
-  const { loginWithGoogle } = useFirebaseAuth();
+  const { loginWithGoogle } = useAuthContext();
 
   const handleGoogleLogin = () => {
     const verifyIdToken = async () => {
       const user = await loginWithGoogle();
-      if (user) {
-        router.push("/");
-      }
-
-      const token = await user.user.getIdToken();
+      const token = await user?.getIdToken();
       console.log("Calling API with user token:", token);
 
       const config = {
