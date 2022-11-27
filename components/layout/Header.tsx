@@ -41,12 +41,7 @@ const Header = () => {
               className="h-10 w-10 rounded-full object-cover"
             />
           )}
-          {currentUser ? (
-            <LogoutButton onLogout={logoutHandler} />
-          ) : (
-            <LoginButton />
-          )}
-          {!loading && currentUser && (
+          {currentUser && (
             <Link
               href="/posts/new"
               className="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
@@ -54,6 +49,11 @@ const Header = () => {
             >
               Create Post
             </Link>
+          )}
+          {currentUser ? (
+            <LogoutButton onLogout={logoutHandler} />
+          ) : (
+            <LoginButton />
           )}
         </div>
       </nav>
