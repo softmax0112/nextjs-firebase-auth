@@ -1,16 +1,17 @@
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
+import fetch from "node-fetch";
 
 import { Post } from "types/types";
 import { useAuthContext } from "context/AuthContext";
 import PostDetail from "components/posts/PostDetail";
 
-export type PostProps = {
+export type Props = {
   post: Post;
 };
 
-export default function PostDetailPage({ post }: PostProps) {
+export default function PostDetailPage({ post }: Props) {
   const { currentUser } = useAuthContext();
   const [isAuthor, setIsAuthor] = useState(false);
 
@@ -32,14 +33,14 @@ export default function PostDetailPage({ post }: PostProps) {
 }
 
 // Use Server-Side Rendering
-export const getServerSideProps: GetServerSideProps<{ post: Post }> = async (
+export const getServerSideProps: GetServerSideProps<Props> = async (
   context
 ) => {
   const { id } = context.query;
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${id}`);
 
-  const post: Post = await res.json();
+  const post: Post = (await res.json()) as any;
 
   res.headers.set(
     "Cache-Control",

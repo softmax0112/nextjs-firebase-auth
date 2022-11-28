@@ -1,16 +1,15 @@
 import Head from "next/head";
 import { GetServerSideProps } from "next";
-import Link from "next/link";
+import fetch from "node-fetch";
 
 import PostList from "../components/posts/PostList";
 import { Post } from "types/types";
-import ProtectedPage from "./protected";
 
-type Posts = {
+type Props = {
   posts: Post[];
 };
 
-export default function HomePage({ posts }: Posts) {
+export default function HomePage({ posts }: Props) {
   return (
     <>
       <Head>
@@ -20,8 +19,6 @@ export default function HomePage({ posts }: Posts) {
           content="This is a sample app using firebase authenticate"
         />
       </Head>
-      {/* protected link below is just for test */}
-      {/* <Link href="/protected">Protected</Link> */}
       <PostList posts={posts} />
     </>
   );
@@ -35,14 +32,12 @@ export default function HomePage({ posts }: Posts) {
 //
 // In the background, a revalidation request will be made to populate the cache
 // with a fresh value. If you refresh the page, you will see the new value.
-export const getServerSideProps: GetServerSideProps<{ posts: Posts }> = async (
+export const getServerSideProps: GetServerSideProps<Props> = async (
   context
 ) => {
-  const res = await fetch(
-    "https://rails-firebase-auth-sample.herokuapp.com/api/v1/posts/"
-  );
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/`);
 
-  const posts: Posts = await res.json();
+  const posts: Post[] = (await res.json()) as any;
 
   res.headers.set(
     "Cache-Control",
