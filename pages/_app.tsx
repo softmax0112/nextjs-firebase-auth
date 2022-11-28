@@ -1,6 +1,5 @@
 import type { AppProps } from "next/app";
 import axios from "axios";
-import NextNProgress from "nextjs-progressbar";
 
 import "../styles/globals.css";
 import Layout from "components/layout/Layout";
@@ -11,7 +10,6 @@ axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthContextProvider>
-      <NextNProgress />
       <Layout>
         <Component {...pageProps} />
       </Layout>

@@ -1,50 +1,55 @@
-import axios from "axios";
 import Head from "next/head";
-import { GetStaticPropsContext } from "next";
-import { ParsedUrlQuery } from "querystring";
+import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 
 import { Post } from "types/types";
 import { useAuthContext } from "context/AuthContext";
 import PostDetail from "components/posts/PostDetail";
 
-// export type PostProps = {
-//   post: Post;
-// };
+export type PostProps = {
+  post: Post;
+};
 
-export default function PostDetailPage() {
+export default function PostDetailPage({ post }: PostProps) {
   const { currentUser } = useAuthContext();
   const [isAuthor, setIsAuthor] = useState(false);
-  const [post, setPost] = useState<Post | undefined>();
-  const router = useRouter();
-  const { id } = router.query;
 
   useEffect(() => {
-    const getPostData = async () => {
-      const response = await axios.get(`/posts/${id}`);
-      const post: Post = response.data;
-      setPost(post);
-      if (currentUser && post?.user_uid === currentUser.uid) {
-        setIsAuthor(true);
-      }
-    };
-    getPostData();
+    if (currentUser && currentUser.uid === post.user_uid) {
+      setIsAuthor(true);
+    }
   }, []);
 
   return (
     <>
       <Head>
-        <title>{post?.title}</title>
+        <title>{post.title}</title>
         <meta name={post?.title} content={post?.body} />
       </Head>
-      {post && (
-        <PostDetail post={post} isAuthor={isAuthor} currentUser={currentUser} />
-      )}
+      <PostDetail post={post} isAuthor={isAuthor} currentUser={currentUser} />
     </>
   );
 }
 
+// Use Server-Side Rendering
+export const getServerSideProps: GetServerSideProps<{ post: Post }> = async (
+  context
+) => {
+  const { id } = context.query;
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${id}`);
+
+  const post: Post = await res.json();
+
+  res.headers.set(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  );
+
+  return { props: { post } };
+};
+
+// Use Static Site Generation
 // export async function getStaticPaths() {
 //   const response = await axios.get("/posts");
 //   const posts: Post[] = response.data;

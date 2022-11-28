@@ -1,29 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import axios from "axios";
+import { GetServerSideProps } from "next";
 
 import { useAuthContext } from "context/AuthContext";
 import PostForm from "components/posts/PostForm";
 import { Post } from "types/types";
 
-export default function EditPostPage() {
-  const [postData, setPostData] = useState<Post | undefined>(undefined);
+type PostProp = {
+  post: Post;
+};
+
+export default function EditPostPage({ post }: PostProp) {
   const { currentUser } = useAuthContext();
   const router = useRouter();
-  const { id } = useRouter().query;
 
   useEffect(() => {
-    const getPostData = async () => {
-      const response = await axios.get(`/posts/${id}`);
-      const post: Post = response.data;
-      if (!currentUser || currentUser.uid !== post.user_uid) {
-        router.push("/login");
-      } else {
-        setPostData(post);
-      }
-    };
-    getPostData();
+    if (!currentUser || currentUser.uid !== post.user_uid) {
+      router.push("/login");
+    }
   }, []);
 
   return (
@@ -36,7 +31,18 @@ export default function EditPostPage() {
         />
       </Head>
       <h3 className="text-3xl font-medium text-center">Edit Post</h3>
-      <PostForm post={postData} />
+      <PostForm post={post} />
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<{ post: Post }> = async (
+  context
+) => {
+  const { id } = context.query;
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${id}`);
+  const post: Post = await res.json();
+
+  return { props: { post } };
+};
