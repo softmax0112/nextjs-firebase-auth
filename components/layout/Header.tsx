@@ -12,7 +12,7 @@ import { useAuthContext } from "context/AuthContext";
 const Header = () => {
   const { currentUser, loading, logout } = useAuthContext();
 
-  const userPhotoUrl = currentUser?.photoURL!;
+  const userPhotoUrl = currentUser?.photoURL;
 
   useEffect(() => {
     if (!loading && !currentUser) {
@@ -35,12 +35,13 @@ const Header = () => {
       </Link>
       <nav className="flex items-center justify-between">
         <div className="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
-          {currentUser && (
+          {userPhotoUrl && (
             <Image
-              src={userPhotoUrl!}
+              src={userPhotoUrl}
               alt="User photo"
               referrerPolicy="no-referrer"
               width={24}
+              height={24}
               className="h-10 w-10 rounded-full object-cover"
             />
           )}
