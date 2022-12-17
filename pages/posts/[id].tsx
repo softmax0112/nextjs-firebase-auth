@@ -9,7 +9,7 @@ import Image from "next/image";
 
 import { PostData } from "types/types";
 import { useAuthContext } from "context/AuthContext";
-import postImage from "../components/posts/postImage.png";
+import postImage from "components/posts/postImage.png";
 
 export type Props = {
   post: PostData;

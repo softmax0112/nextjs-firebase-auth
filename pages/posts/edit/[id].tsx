@@ -19,7 +19,7 @@ export default function EditPostPage({ post }: PostProp) {
     if (!currentUser || currentUser.uid !== post.user_uid) {
       router.push("/login");
     }
-  }, []);
+  }, [currentUser, post.user_uid]);
 
   return (
     <>
