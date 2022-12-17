@@ -121,7 +121,6 @@ export default function PostForm(props: Props) {
                 <input
                   {...register("title", { required: true, maxLength: 60 })}
                   defaultValue={post?.title}
-                  aria-invalid={errors.title ? "true" : "false"}
                   type="text"
                   id="title"
                   name="title"

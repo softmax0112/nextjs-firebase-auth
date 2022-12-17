@@ -19,7 +19,6 @@
       "components/*": ["components/*"],
       "context/*": ["context/*"],
       "hooks/*": ["hooks/*"],
-      "pages/*": ["pages/*"],
       "types/*": ["types/*"]
     }
   },

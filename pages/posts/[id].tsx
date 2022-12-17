@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetStaticPropsContext } from "next";
 import { useEffect, useState } from "react";
 import fetch from "node-fetch";
 import { useRouter } from "next/router";
@@ -144,7 +144,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 
 //   try {
 //     const response = await axios.get(`/posts/${id}`);
-//     const post: Post = response.data;
+//     const post: PostData = response.data;
 //     return {
 //       props: {
 //         post: post,
