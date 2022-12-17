@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import Router from "next/router";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
 
 import LoginButton from "../atoms/button/LoginButton";
 import LogoutButton from "../atoms/button/LogoutButton";
@@ -11,7 +12,7 @@ import { useAuthContext } from "context/AuthContext";
 const Header = () => {
   const { currentUser, loading, logout } = useAuthContext();
 
-  const userPhotoUrl = currentUser?.photoURL;
+  const userPhotoUrl = currentUser!.photoURL;
 
   useEffect(() => {
     if (!loading && !currentUser) {
@@ -35,8 +36,8 @@ const Header = () => {
       <nav className="flex items-center justify-between">
         <div className="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
           {currentUser && (
-            <img
-              src={userPhotoUrl || undefined}
+            <Image
+              src={userPhotoUrl!}
               alt="User photo"
               referrerPolicy="no-referrer"
               width={24}

@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Post } from "types/types";
+import { PostData } from "types/types";
 
 type Props = {
-  post: Post;
+  post: PostData;
 };
 
 const PostListItem = ({ post }: Props) => {

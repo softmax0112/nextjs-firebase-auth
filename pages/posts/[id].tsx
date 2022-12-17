@@ -5,9 +5,11 @@ import fetch from "node-fetch";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import axios from "axios";
+import Image from "next/image";
 
 import { PostData } from "types/types";
 import { useAuthContext } from "context/AuthContext";
+import postImage from "../components/posts/postImage.png";
 
 export type Props = {
   post: PostData;
@@ -23,7 +25,7 @@ export default function PostDetailPage({ post }: Props) {
     if (currentUser && currentUser.uid === post.user_uid) {
       setIsAuthor(true);
     }
-  }, []);
+  }, [currentUser, post.user_uid]);
 
   const deletePost = async () => {
     const result = confirm("Want to delete?");
@@ -60,10 +62,10 @@ export default function PostDetailPage({ post }: Props) {
       <section className="text-gray-600 body-font">
         <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
           <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
-            <img
+            <Image
               className="object-cover object-center rounded"
-              alt="hero"
-              src="https://dummyimage.com/720x600"
+              alt="post card image"
+              src={postImage}
             />
           </div>
           <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
