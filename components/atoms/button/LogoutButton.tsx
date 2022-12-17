@@ -1,5 +1,5 @@
 type Props = {
-  onLogout: () => {};
+  onLogout: () => Promise<void>;
 };
 
 const LogoutButton = ({ onLogout }: Props) => {

@@ -9,3 +9,17 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
+
+/* https://fkhadra.github.io/react-toastify/how-to-style/ */
+.Toastify__toast--warning {
+  font-weight: 600;
+}
+.Toastify__toast--error {
+  font-weight: 600;
+}
+.Toastify__toast--success {
+  font-weight: 600;
+}
+.Toastify__toast--info {
+  font-weight: 600;
+}

@@ -1,4 +1,4 @@
-const GoogleLogo = (): JSX.Element => {
+const GoogleLogo = () => {
   return (
     <svg
       width="24px"
