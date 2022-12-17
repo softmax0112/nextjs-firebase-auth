@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import Router from "next/router";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import LoginButton from "../atoms/button/LoginButton";
 import LogoutButton from "../atoms/button/LogoutButton";
@@ -19,7 +21,7 @@ const Header = () => {
 
   const logoutHandler = async () => {
     await logout();
-    alert("You are signed out");
+    toast.success("You are signed out");
   };
 
   return (

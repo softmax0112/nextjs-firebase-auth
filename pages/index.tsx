@@ -2,11 +2,11 @@ import Head from "next/head";
 import { GetServerSideProps } from "next";
 import fetch from "node-fetch";
 
-import PostList from "../components/posts/PostList";
-import { Post } from "types/types";
+import { PostData } from "types/types";
+import PostListItem from "components/posts/PostListItem";
 
 type Props = {
-  posts: Post[];
+  posts: PostData[];
 };
 
 export default function HomePage({ posts }: Props) {
@@ -19,7 +19,18 @@ export default function HomePage({ posts }: Props) {
           content="This is a sample app using firebase authenticate"
         />
       </Head>
-      <PostList posts={posts} />
+      <section className="mx-auto py-10 px-8">
+        <div className="px-40">
+          <h3 className="text-3xl font-medium text-center">All Posts</h3>
+          <div className="container py-6 mx-auto text-gray-600 body-font overflow-hidden">
+            <div className="divide-y-2 divide-gray-100">
+              {posts?.map((post) => (
+                <PostListItem key={post.id} post={post} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
@@ -36,8 +47,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   context
 ) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/`);
+  // const res = await fetch("http://127.0.0.1:3001/api/v1/posts/");
 
-  const posts: Post[] = (await res.json()) as any;
+  const posts: PostData[] = (await res.json()) as any;
 
   res.headers.set(
     "Cache-Control",

@@ -1,16 +1,19 @@
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/router";
 
 import GoogleLogo from "components/atoms/GoogleLog";
 import { useAuthContext } from "context/AuthContext";
 
 export default function LoginPage() {
+  const router = useRouter();
   const { loginWithGoogle } = useAuthContext();
 
   const handleGoogleLogin = () => {
     const verifyIdToken = async () => {
       const user = await loginWithGoogle();
       const token = await user?.getIdToken();
-      console.log("Calling API with user token:", token);
 
       const config = {
         headers: { authorization: `Bearer ${token}` },
@@ -18,8 +21,10 @@ export default function LoginPage() {
 
       try {
         const response = await axios.post("/auth", null, config);
-        console.log(response.data);
+        toast.success("You are signed in successfully!");
+        router.push("/");
       } catch (err) {
+        toast.error("Something wrong happened!");
         let message;
         if (axios.isAxiosError(err) && err.response) {
           console.error(err.response.data.message);

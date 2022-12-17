@@ -2,12 +2,14 @@ import { useRouter } from "next/router";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import Head from "next/head";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import { Post } from "types/types";
+import { PostInputs, PostData } from "types/types";
 import { useAuthContext } from "context/AuthContext";
 
 type Props = {
-  post?: Post;
+  postData?: PostData;
 };
 
 export default function PostForm(props: Props) {
@@ -15,40 +17,45 @@ export default function PostForm(props: Props) {
   const router = useRouter();
 
   // if no post varaible passed in => add new post
-  const post = props?.post;
+  const post = props?.postData;
   const isAddMode = !post;
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Post>();
+  } = useForm<PostInputs>();
 
-  const onSubmit: SubmitHandler<Post> = (postData: Post) => {
-    return isAddMode ? createPost(postData) : updatePost(post.id, postData);
+  const onSubmit: SubmitHandler<PostInputs> = (postInputData) => {
+    return isAddMode
+      ? createPost(postInputData)
+      : updatePost(post.id, postInputData);
   };
 
   async function setConfig() {
     const token = await currentUser?.getIdToken();
-    console.log("Calling API with user token:", token);
     const config = {
       headers: { authorization: `Bearer ${token}` },
     };
     return config;
   }
 
-  async function createPost(postData: Post) {
+  async function createPost(postInputData: PostInputs) {
     const config = await setConfig();
 
     try {
-      const response = await axios.post("/posts", { post: postData }, config);
-      console.log(response.data);
+      const response = await axios.post(
+        "/posts",
+        { post: postInputData },
+        config
+      );
       if (response.status === 200) {
-        alert("Post is created successfully");
+        toast.success("Post was successfully created!");
         router.push("/");
         return response.data;
       }
     } catch (err) {
+      toast.error("Failure: something wrong happened!");
       let message;
       if (axios.isAxiosError(err) && err.response) {
         console.error(err.response.data.message);
@@ -59,22 +66,23 @@ export default function PostForm(props: Props) {
     }
   }
 
-  async function updatePost(id: number, postData: Post) {
+  async function updatePost(id: number, postInputData: PostInputs) {
     const config = await setConfig();
 
     try {
       const response = await axios.patch(
         `/posts/${id}`,
-        { post: postData },
+        { post: postInputData },
         config
       );
       console.log(response.data);
       if (response.status === 200) {
-        alert("Post is updated successfully");
+        toast.success("Post is updated successfully!");
         router.push(`/posts/${id.toString()}`);
         return response.data;
       }
     } catch (err) {
+      toast.error("Failure: something wrong happened!");
       let message;
       if (axios.isAxiosError(err) && err.response) {
         console.error(err.response.data.message);
@@ -112,7 +120,7 @@ export default function PostForm(props: Props) {
                 </label>
                 <input
                   {...register("title", { required: true, maxLength: 60 })}
-                  defaultValue={props.post?.title}
+                  defaultValue={post?.title}
                   aria-invalid={errors.title ? "true" : "false"}
                   type="text"
                   id="title"
@@ -134,7 +142,7 @@ export default function PostForm(props: Props) {
                 </label>
                 <textarea
                   {...register("body", { required: true, maxLength: 500 })}
-                  defaultValue={props.post?.body}
+                  defaultValue={post?.body}
                   id="body"
                   name="body"
                   className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
