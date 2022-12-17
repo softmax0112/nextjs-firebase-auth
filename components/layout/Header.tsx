@@ -12,7 +12,7 @@ import { useAuthContext } from "context/AuthContext";
 const Header = () => {
   const { currentUser, loading, logout } = useAuthContext();
 
-  const userPhotoUrl = currentUser!.photoURL;
+  const userPhotoUrl = currentUser?.photoURL!;
 
   useEffect(() => {
     if (!loading && !currentUser) {
