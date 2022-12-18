@@ -78,7 +78,7 @@ export default function PostDetailPage({ post }: Props) {
             <div className="flex justify-center">
               {isAuthor && (
                 <Link
-                  href={`/posts/edit/${post.id}`}
+                  href={`/posts/${post.id}/edit`}
                   type="button"
                   className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
                 >
