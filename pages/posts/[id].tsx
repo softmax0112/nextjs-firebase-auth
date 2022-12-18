@@ -25,7 +25,7 @@ export default function PostDetailPage({ post }: Props) {
     if (currentUser && currentUser.uid === post.user_uid) {
       setIsAuthor(true);
     }
-  }, [currentUser, post.user_uid]);
+  }, [currentUser]);
 
   const deletePost = async () => {
     const result = confirm("Want to delete?");
@@ -57,14 +57,14 @@ export default function PostDetailPage({ post }: Props) {
     <>
       <Head>
         <title>{post.title}</title>
-        <meta name={post?.title} content={post?.body} />
+        <meta name="description" content={post.body} />
       </Head>
       <section className="text-gray-600 body-font">
         <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
           <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
             <Image
               className="object-cover object-center rounded"
-              alt="post card image"
+              alt="Post image"
               src={postImage}
             />
           </div>

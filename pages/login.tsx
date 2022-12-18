@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 
-import GoogleLogo from "components/atoms/GoogleLog";
+import GoogleLogo from "components/atoms/GoogleLogo";
 import { useAuthContext } from "context/AuthContext";
 
 export default function LoginPage() {

@@ -23,13 +23,6 @@ export default function EditPostPage({ post }: PostProp) {
 
   return (
     <>
-      <Head>
-        <title>Firebase Auth Sample App</title>
-        <meta
-          name="description"
-          content="This is a sample app using firebase authenticate"
-        />
-      </Head>
       <h3 className="text-3xl font-medium text-center">Edit Post</h3>
       <PostForm postData={post} />
     </>

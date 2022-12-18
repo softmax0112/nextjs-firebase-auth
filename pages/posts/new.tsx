@@ -18,13 +18,6 @@ export default function NewPostPage() {
 
   return (
     <>
-      <Head>
-        <title>Firebase Auth Sample App</title>
-        <meta
-          name="description"
-          content="This is a sample app using firebase authenticate"
-        />
-      </Head>
       <PostForm />
     </>
   );
